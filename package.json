@@ -1,0 +1,27 @@
+{
+  "name": "sniddl-ajax",
+  "version": "1.0.3",
+  "description": "Make anything clickable and be able to create any type of request.",
+  "main": "sniddl-ajax.js",
+  "scripts": {
+    "test": "sniddl-ajax"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sniddl/Sniddl-AJAX.git"
+  },
+  "keywords": [
+    "ajax",
+    "next-tick",
+    "pre-dom",
+    "dom",
+    "parser"
+  ],
+  "author": "Sniddl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sniddl/Sniddl-AJAX/issues"
+  },
+  "homepage": "https://github.com/Sniddl/Sniddl-AJAX#readme"
+
+}
