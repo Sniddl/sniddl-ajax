@@ -1,5 +1,12 @@
 # sniddl-ajax
-Make anything clickable and able to create http requests.
+Develop AJAX applications faster!
+You no longer need to hunt down and write multiple AJAX click events. 
+Just add a few attributes to the elements of your choosing then POW! 
+Instant AJAX functionality & easy to read code! 
+#### How it works 
+When the page loads, it searches for specific attributes then attaches the data directly to the element object. 
+Then it removes the previously declared attributes from the DOM. 
+This makes it more challenging for Little Jimmy to snoop around your front-end code. 
 
 ## Installation
 Install Sniddl-Ajax with npm or just use the JS file like any other JS file.
