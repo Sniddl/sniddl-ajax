@@ -9,11 +9,12 @@ __SNIDDL_AJAX_INIT__ = function (elements){
       error:   a('_error')   || a('data-error'),
       json:    a('_json')    || a('data-json'),
       method:  a('_method')  || a('data-method'),
-      success: a('_success') || a('data-success')
+      success: a('_success') || a('data-success'),
+      target:  a('_target')  || a('target')
     }
 
-    r('_action');r('_ajax');r('_error');r('_json');r('_method');r('_success');
-    r('data-action');r('data-ajax');r('data-error');r('data-json');r('data-method');r('data-success');
+    r('_action');r('_ajax');r('_error');r('_json');r('_method');r('_success');r('_target');
+    r('data-action');r('data-ajax');r('data-error');r('data-json');r('data-method');r('data-success');r('target')
 
     el.onclick = function(e) {
       action  = this.__data__['action'];
@@ -22,22 +23,23 @@ __SNIDDL_AJAX_INIT__ = function (elements){
       json    = JSON.parse(this.__data__['json']);
       method  = this.__data__['method'];
       success = this.__data__['success'];
+      target  = this.__data__['target'];
       data    = window.__SNIDDL_AJAX__.data;
       headers = window.__SNIDDL_AJAX__.headers;
 
+      //merge json + permanent json
+      _json = json;
+      json = {};
+      for(var key in _json){
+        json[key]=_json[key];
+      }
+      for(var key in data){
+        json[key]=data[key];
+      }
+
       e.preventDefault();
 
-      if (ajax.toLowerCase() == "true" ) {
-
-        //merge json + permanent json
-        _json = json;
-        json = {};
-        for(var key in _json){
-          json[key]=_json[key];
-        }
-        for(var key in data){
-          json[key]=data[key];
-        }
+      if (ajax && ajax.toLowerCase() == "true" ) {
 
         var xhr = new XMLHttpRequest();
         xhr.open(method, action);
@@ -82,19 +84,19 @@ __SNIDDL_AJAX_INIT__ = function (elements){
         form.setAttribute("method", method);
         form.setAttribute("action", action);
         // create permanent fields for each key in data.
-        if (data) {
-          if (typeof data == "object") {
-            for (var key in data){
-              input = document.createElement('input');
-              form.appendChild(input);
-              input.setAttribute("name", key);
-              input.setAttribute("value", data[key]);
-              input.setAttribute('type', 'hidden');
-            }
-          } else {
-            throw "The data parameter must be an object.";
-          }
-        }
+            // if (data) {
+            //   if (typeof data == "object") {
+            //     for (var key in data){
+            //       input = document.createElement('input');
+            //       form.appendChild(input);
+            //       input.setAttribute("name", key);
+            //       input.setAttribute("value", data[key]);
+            //       input.setAttribute('type', 'hidden');
+            //     }
+            //   } else {
+            //     throw "The data parameter must be an object.";
+            //   }
+            // }
         // create hidden input for each json key
         for (var key in json){
           input = document.createElement('input');
@@ -108,7 +110,18 @@ __SNIDDL_AJAX_INIT__ = function (elements){
         form.submit();
       }
       else if (action) {
-        window.location = action;
+        switch (target) {
+          case "_blank": window.open(action); break;
+          case "_self": window.self.location = action; break;
+          case "_parent": window.parent.location = action; break;
+          case "_top": window.top.location = action; break;
+          case "blank": window.open(action); break;
+          case "self": window.self.location = action; break;
+          case "parent": window.parent.location = action; break;
+          case "top": window.top.location = action; break;
+          default:
+            window.location = action;
+        }
       }
     }
   }
@@ -124,4 +137,4 @@ setTimeout(__SNIDDL_AJAX_INIT__(elements),
 
 // @prop data OBJECT -- data that is sent through forms.
 // @prop headers OBJECT -- headers for the requests.
-window.__SNIDDL_AJAX__ = {};
+// window.__SNIDDL_AJAX__ = {};
