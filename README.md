@@ -3,10 +3,15 @@ Develop AJAX applications faster!
 You no longer need to hunt down and write multiple AJAX click events. 
 Just add a few attributes to the elements of your choosing then POW! 
 Instant AJAX functionality & easy to read code! 
+
+## Recently Added Features
+ - Target attribute. [Reference](https://www.w3schools.com/tags/att_a_target.asp)
+ - Added back some code that got overwritten by accident.
+
 #### How it works 
 When the page loads, it searches for specific attributes then attaches the data directly to the element object. 
 Then it removes the previously declared attributes from the DOM. 
-This makes it more challenging for Little Jimmy to snoop around your front-end code. 
+This makes it more challenging for Little Jimmy to snoop around your front-end code. **But it is still javascript so don't store sensitive information**
 
 ## Installation
 Install Sniddl-Ajax with npm or just use the JS file like any other JS file.
@@ -32,6 +37,7 @@ Attribute | Type | Description | Optional
 **success** | Javascript | Code that will run on a successful ajax request. | yes
 **error**  |  Javascript | Code that will run on a failed ajax request. | yes
 **json** | Object | Any data you might want to pass throught the request. | yes
+**target** | String | Target attribute for all elements. Works the same as on links, but is removed from DOM. | yes
 
 
 
