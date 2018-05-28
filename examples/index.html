@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="../src/sniddl-ajax.js" charset="utf-8"></script>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 my-4 mx-auto card linkable" url="https://twitter.com" blank>
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Card goes to twitter.com</h6>
+            <p>This whole card is linkable and goes to <kbd>twitter.com</kbd>. The  <a href="https://reddit.com" target="_blank">Reddit</a> link goes to <kbd>reddit.com</kbd>. The button goes to <kbd>google.com</kbd>. Yay links inside links!</p>
+            <a href="https://reddit.com" class="card-link mr-3" target="_blank">Reddit</a>
+            <button class="btn btn-primary linkable" url="https://google.com" blank>Google</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+      Sniddl.init('.linkable', {
+        addCss: true,
+        headers: {
+          'content-type': 'application/json',
+          'sniddl': 'powered by sniddl'
+        },
+        params: {
+          "password": "secret"
+        }
+      })
+      function yay(res) {
+        alert('success! check the console')
+        console.log(res);
+      }
+    </script>
+  </body>
+</html>

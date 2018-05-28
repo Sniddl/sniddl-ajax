@@ -1,8 +1,8 @@
 {
   "name": "sniddl-ajax",
-  "version": "1.0.6",
-  "description": "Make anything clickable and be able to create any type of request.",
-  "main": "sniddl-ajax.js",
+  "version": "1.0.8",
+  "description": "Give any element the ability to link to pages and make requests.",
+  "main": "src/sniddl-ajax.js",
   "scripts": {
     "test": "sniddl-ajax"
   },
@@ -12,10 +12,12 @@
   },
   "keywords": [
     "ajax",
-    "next-tick",
-    "pre-dom",
-    "dom",
-    "parser"
+    "framework",
+    "browser",
+    "client",
+    "request",
+    "response",
+    "json"
   ],
   "author": "Sniddl",
   "license": "MIT",

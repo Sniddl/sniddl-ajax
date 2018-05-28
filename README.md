@@ -1,17 +1,9 @@
 # sniddl-ajax
-Develop AJAX applications faster!
-You no longer need to hunt down and write multiple AJAX click events. 
-Just add a few attributes to the elements of your choosing then POW! 
-Instant AJAX functionality & easy to read code! 
+Develop real-time applications faster!
+Give any element the ability to link to pages and make requests. No complex components, no onclick functions, & no event listeners. Just link and go!
 
-## Recently Added Features
- - Target attribute. [Reference](https://www.w3schools.com/tags/att_a_target.asp)
- - Added back some code that got overwritten by accident.
-
-#### How it works 
-When the page loads, it searches for specific attributes then attaches the data directly to the element object. 
-Then it removes the previously declared attributes from the DOM. 
-This makes it more challenging for Little Jimmy to snoop around your front-end code. **But it is still javascript so don't store sensitive information**
+#### How it works
+When the init function is called. It will attach a  `SniddlComponent` instance to the queried HTML elements. The `SniddlComponent` makes a click event based on the data you provided.
 
 ## Installation
 Install Sniddl-Ajax with npm or just use the JS file like any other JS file.
@@ -19,73 +11,69 @@ Install Sniddl-Ajax with npm or just use the JS file like any other JS file.
 npm install sniddl-ajax
 ```
 Then load it into your project.
-```
-require('sniddl-ajax');
+```js
+window.Sniddl = require('sniddl-ajax');
 ```
 Be sure to use [webpack](https://webpack.github.io/) or [browserify](http://browserify.org/) if necessary.
 
 ## Use
-Using Sniddl-Ajax can be used right out of the box. Just add the data attributes that you want.
-Or use the shorthand method by sticking an underscore in front of it.
-`<h1 data-action="http://google.com"></h1>` Is the same as. `<h1 _action="http://google.com"></h1>`
+You must define which elements will be linkable. This can be done my calling the init method. Data inside the headers & params objects are sent with every request.
+```js
+Sniddl.init('.linkable', {
+  addCss: false
+  headers: {},
+  params: {}
+});
+```
+If you don't want to provide any extra options that will work too.
+```js
+Sniddl.init('.linkable');
+```
+
+To finish making an element linkable ensure that it has the proper attributes so it can be selected by the init method. In this example all linkable elements with have the `linkable` class name. Then use one of the attributes listed below. (ex: `method="post"` or `data-method="post"`) **The url attribute is required**
+
+```HTML
+<h1 class="linkable" url="http://google.com">Go to Google's website</h1>
+```
 
 Attribute | Type | Description | Optional
 ---|:---:|---|:---:
-**ajax** |  Boolean | Determines if ajax should be used. | yes
-**action** | String | The URL for the request. | **no**
-**method** | String | An optional value for the method you're using. | yes
-**success** | Javascript | Code that will run on a successful ajax request. | yes
-**error**  |  Javascript | Code that will run on a failed ajax request. | yes
-**json** | Object | Any data you might want to pass throught the request. | yes
-**target** | String | Target attribute for all elements. Works the same as on links, but is removed from DOM. | yes
+**url** |  String | The url that will be used in the request. | **no**
+**params** | JSON | The JSON string to use in the request. | yes
+**method** | String | Define what HTTP method you're using. (get, post, put, etc.) | yes
+**onsuccess** | Function | The name of the function that will run when the request is successful. Only applies to ajax requests | yes
+**onerror**  |  Function | The name of the function that will run when the request has failed. Only applies to ajax requests | yes
+**redirect** | Boolean | If true, the a form will be used instead of ajax. Only works if a method is defined. | yes
+**blank** | Boolean | If true, the link will open in a new tab. Only works if a method does not exist. (ie. a simple link) | yes
 
+#### Use cases
 
-
-So say you had an image that you wanted to link to the image source or another page.
-You no longer need to wrap it in an anchor tag. Keep it simple by adding the action attribute. 
-```
-<img src="http://placehold.it/350x150" data-action="https://placehold.it">
-```
-
-Now maybe you want to create a secure logout link for your users. Normally you would have to use something like this.
-```
-<form action="index.html" method="post">
-    <input type="hidden" name="_token" value="abcdefg123">
-    <button type="submit">Logout</button>
-</form>
-```
-Well guess what? You can save time now. Just do this.
-```
-<button _action="index.html" 
-        _method="post" 
-        _json='{"token": "abcdefg123" }'> 
-Logout </button>
-```
-Honestly, you probably don't have a secure token that you can just type in. You most likely have it set as a cookie or stored somewhere else. You also probably don't want to type it in everytime you create a request. 
-That's why I also allowed you to create permanent values. This can be a http header or a field. All you have to do is delecare the `__SNIDDL-AJAX__` object. This should be one of the first things javascript runs. 
-```
-__SNIDDL_AJAX__ = {
-    data: {
-      "_token": window.global.mysecuretoken
-    },
-    headers: {
-      "api_key": mysecuretoken,
-      "favorite_color": "blue"
-    }
-};
-```
-Finally you can use ajax so you can get data with out having to change the page.
-```
-<div class="title m-b-md"
-     data-ajax="true"
-     data-action="/vote/yes"
-     data-method="post"
-     data-success="this.innerHTML = 'thanks' "
-     data-error="functionToRunOnError()"
-     data-json='{"voted": true}'
- >
-    Vote Yes
-</div>
+Open the image in a new tab when clicked.
+```html
+<img src="http://placehold.it/350x150" url="https://placehold.it" blank>
 ```
 
-If you have any questions or you want to suggest a change, feel free to create a issue. I will be happy to look at it!
+Logout users with a post method.
+```html
+<button url="/logout"
+        method="post"
+        params='{"csrf_token": "..." }'>
+        Logout
+</button>
+```
+
+Fetch more posts.
+```HTML
+<button id="load-more"
+        url="/posts?page=2"
+        method="get"
+        onsuccess="loadMore">
+        Load more
+</button>
+```
+
+```JS
+function loadMore(res) {
+  $('#load-more').attr('url', '/post')
+}
+```

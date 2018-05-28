@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Reddit Clone</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="../src/sniddl-ajax.js" charset="utf-8"></script>
+  </head>
+  <body>
+
+    <div class="fixed-top bg-dark">
+      <div class="input-group my-3 px-3">
+        <input type="text" class="form-control" placeholder="Subreddit" value="all" bind="#search">
+        <div class="input-group-append">
+          <button id="search"
+                  class="btn btn-primary linkable"
+                  type="button"
+                  method="get"
+                  :url="'https://www.reddit.com/r/'+ this.$data.value +'/hot.json?limit=25'"
+                  onsuccess="yay"
+                  onbind="changed"
+          >Get Posts</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5 pt-5">
+      <div class="row" id="results"></div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+      Sniddl.init('.linkable', {
+        addCss: true,
+        headers: {
+
+        },
+        params: {
+          "password": "secret"
+        }
+      })
+      function changed (sniddl, data, old) {
+        // console.log('changed');
+        sniddl.change('url', 'https://www.reddit.com/r/'+ data.value +'/hot.json?limit=25')
+      }
+      function yay(sniddl, res) {
+        // console.log(sniddl.url);
+        window.addEventListener('scroll', function () {
+          var d = document.documentElement;
+          var offset = d.scrollTop + window.innerHeight;
+          var height = d.offsetHeight;
+          if (offset > height - 400 || offset === height) {
+            sniddl.el.click()
+          }
+        })
+
+        var last = res.data.children.slice().reverse()[0].data.name;
+        sniddl.change('url', sniddl.url + '&after=' + last);
+
+        res.data.children.forEach(function (child) {
+          image = ''
+          if (child.data.preview) {
+            if (child.data.preview.enabled) {
+              image = `<img class="w-100 mb-2" src="${child.data.url}" alt="thumbnail" />`
+            }
+            if (child.data.preview.reddit_video_preview) {
+              let i = child.data.preview.images[0];
+              let info = child.data.preview.reddit_video_preview
+              if (info.is_gif && i.variants.gif) {
+                image = `<img class="w-100 mb-2" src="${i.variants.gif.source.url}" alt="thumbnail" />`
+              } else {
+                image = `<img class="w-100 mb-2" src="${i.source.url}" alt="thumbnail" />`
+              }
+
+            }
+            else {
+              image = `<img class="w-100 mb-2" src="${child.data.thumbnail}" alt="thumbnail" />`
+            }
+          }
+          if (child.data.thumbnail === '' || child.data.thumbnail === 'image') {
+            image = `<img class="w-100 mb-2" src="${child.data.url}" alt="thumbnail" />`
+          }
+          if (['nsfw', 'default', 'self', 'spoiler'].indexOf(child.data.thumbnail) >= 0) {
+            image = ''
+          }
+
+          var button = ['nsfw', 'spoiler'].indexOf(child.data.thumbnail) >= 0 ? child.data.thumbnail : 'view'
+
+          document.getElementById('results').innerHTML += (`
+            <div class="col-md-4 my-2">
+              <div class="card">
+                <div class="card-body p-o">
+                  ${image}
+                  <h5 class="card-title">${child.data.title}</h5>
+                  <a href="//reddit.com${child.data.permalink}" class="card-link mr-3" target="_blank">${button}</a>
+                </div>
+              </div>
+            </div>
+          `)
+        })
+
+      }
+    </script>
+  </body>
+</html>
