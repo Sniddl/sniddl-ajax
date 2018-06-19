@@ -1,6 +1,6 @@
 {
   "name": "sniddl-ajax",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Give any element the ability to link to pages and make requests.",
   "main": "src/sniddl-ajax.js",
   "scripts": {
